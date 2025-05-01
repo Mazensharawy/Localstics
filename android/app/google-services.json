@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "219301891752",
+    "project_id": "localstics-96a0d",
+    "storage_bucket": "localstics-96a0d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219301891752:android:f3baacba13dc1c816e3c9d",
+        "android_client_info": {
+          "package_name": "com.example.localstics"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7aOd-Y4PLOdn-YHzIfiXVpxNswvPzLLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
