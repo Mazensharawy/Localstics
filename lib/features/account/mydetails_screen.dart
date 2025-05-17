@@ -7,6 +7,8 @@ import 'package:localstics/core/utils/colors.dart';
 import 'package:localstics/core/utils/styles.dart';
 import 'package:localstics/features/HomePage/widgets/black_button.dart';
 import 'package:localstics/features/account/account_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyDetailsScreen extends StatefulWidget {
   const MyDetailsScreen({super.key});
@@ -18,6 +20,47 @@ class MyDetailsScreen extends StatefulWidget {
 class _MyDetailsScreenState extends State<MyDetailsScreen> {
   String? selectedGender;
   TextEditingController dateController = TextEditingController();
+
+  String userName = "";
+  String userEmail = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserDetails();
+  }
+
+  Future<void> _fetchUserDetails() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userEmail = user.email ?? "Unknown";
+      });
+
+      try {
+        final response = await Supabase.instance.client
+            .from('users')
+            .select('username')
+            .eq('email', userEmail)
+            .single();
+
+        if (response['username'] != null) {
+          setState(() {
+            userName = response['username'];
+          });
+        } else {
+          setState(() {
+            userName = "Name not found";
+          });
+        }
+      } catch (error) {
+        print("Error fetching user name: $error");
+        setState(() {
+          userName = "Error fetching name";
+        });
+      }
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -104,7 +147,7 @@ class _MyDetailsScreenState extends State<MyDetailsScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 14, left: 20),
-                  child: Text(' Cody Fisher',
+                  child: Text(userName,
                    style: getTextStyle(fontSize: 16,),
                   ),
                 ),
@@ -121,7 +164,7 @@ class _MyDetailsScreenState extends State<MyDetailsScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 14, left: 20),
-                  child: Text('cody.fisher45@example',
+                  child: Text(userEmail,
                    style: getTextStyle(fontSize: 16,),
                   ),
                 ),

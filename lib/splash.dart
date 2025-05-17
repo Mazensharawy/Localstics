@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'onboard.dart';
 import 'package:lottie/lottie.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'features/Seller/user_mode.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -28,36 +30,53 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToOnboarding() async {
-    // Create onboarding screen instance
-    final onboardingScreen = OnboardingScreen();
-
-    // Initial display time before transition starts (1.8 seconds)
     await Future.delayed(Duration(milliseconds: 2600));
-
     if (!mounted) return;
-
-    // Navigate to onboarding with fade transition (1.2 seconds)
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => onboardingScreen,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(
-            opacity: Tween<double>(
-              begin: 0.0,
-              end: 1.0,
-            ).animate(CurvedAnimation(
-              parent: animation,
-              // Using easeInOut for smoother transition
-              curve: Curves.easeInOut,
-            )),
-            child: child,
-          );
-        },
-        // Slower transition duration (1.2 seconds)
-        transitionDuration: Duration(milliseconds: 1200),
-      ),
-    );
+    // Check if user is logged in
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // User is logged in, go to home (UserModeWrapper)
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => UserModeWrapper(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: Tween<double>(
+                begin: 0.0,
+                end: 1.0,
+              ).animate(CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeInOut,
+              )),
+              child: child,
+            );
+          },
+          transitionDuration: Duration(milliseconds: 1200),
+        ),
+      );
+    } else {
+      // Not logged in, go to onboarding
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => OnboardingScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: Tween<double>(
+                begin: 0.0,
+                end: 1.0,
+              ).animate(CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeInOut,
+              )),
+              child: child,
+            );
+          },
+          transitionDuration: Duration(milliseconds: 1200),
+        ),
+      );
+    }
   }
 
   @override
@@ -86,3 +105,11 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+// Prevent back navigation to login/onboarding after login
+// Use pushAndRemoveUntil in your login/signup screens after successful login/signup:
+// Navigator.of(context).pushAndRemoveUntil(
+//   MaterialPageRoute(builder: (context) => UserModeWrapper()),
+//   (route) => false,
+// );
+// This ensures the user cannot go back to onboarding/login after logging in.

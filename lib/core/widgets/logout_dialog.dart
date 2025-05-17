@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:localstics/core/utils/colors.dart';
 import 'package:localstics/core/utils/styles.dart';
+import 'package:localstics/auth/auth_service.dart';
+import 'package:localstics/onboard.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void showLogoutDialog(BuildContext context) {
   showDialog(
@@ -38,8 +41,17 @@ void showLogoutDialog(BuildContext context) {
             ),
             const Gap(30),
             ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(); 
+              onPressed: () async {
+                try {
+                  final authService = AuthService();
+                  await authService.signout(); // Firebase sign out
+                  await GoogleSignIn().signOut(); // Google sign out
+                } catch (e) {}
+                Navigator.of(context).pop();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => OnboardingScreen()),
+                  (route) => false,
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
