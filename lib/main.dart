@@ -10,12 +10,13 @@ Future<void> main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print("firebase run correct");
+  print("***** Firebase run correct *****");
   await Supabase.initialize(
     url: "https://knhumcyeelxdpcinhnyq.supabase.co",
     anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuaHVtY3llZWx4ZHBjaW5obnlxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzMyNzAyNywiZXhwIjoyMDYyOTAzMDI3fQ.06xQaq1RTTjgcIn0dBf9E6ibDs11MpFlPB80UWZ4cUU",
   );
-  print("supabase run correct");
+
+
   runApp(MaterialApp(debugShowCheckedModeBanner: false,home: SplashScreen()));
 
   

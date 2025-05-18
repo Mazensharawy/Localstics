@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localstics/core/utils/colors.dart';
-import 'package:localstics/features/Seller/SellerSignUp/signup_seller_screen.dart';
+// import 'package:localstics/features/Seller/SellerSignUp/signup_seller_screen.dart';
 import 'package:localstics/features/Seller/accountS/account_seller.dart';
 import 'package:localstics/features/Seller/products/product_screen.dart';
 import 'package:localstics/features/Seller/wallet/wallet_seller.dart';
@@ -31,12 +31,12 @@ class _NavbarSellerState extends State<NavbarSeller> {
   }
 
   List<Widget> get _screens => [
-        Navigator(
-          key: GlobalKey<NavigatorState>(),
-          onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => const SignBusinessInfoScreen(),
-          ),
-        ),
+        // Navigator(
+        //   key: GlobalKey<NavigatorState>(),
+        //   onGenerateRoute: (settings) => MaterialPageRoute(
+        //     builder: (context) => const SignBusinessInfoScreen(),
+        //   ),
+        // ),
         Navigator(
           key: GlobalKey<NavigatorState>(),
           onGenerateRoute: (settings) => MaterialPageRoute(
@@ -60,6 +60,7 @@ class _NavbarSellerState extends State<NavbarSeller> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // Ensure area behind padding is white
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -67,6 +68,7 @@ class _NavbarSellerState extends State<NavbarSeller> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppColors.bgColor, // Set background to white
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         selectedItemColor: AppColors.black,
@@ -74,10 +76,10 @@ class _NavbarSellerState extends State<NavbarSeller> {
         showUnselectedLabels: false,
         onTap: (value) => changeTab(value),
         items: [
-          BottomNavigationBarItem(icon: SvgPicture.asset('assets/ordericon.svg',
-          colorFilter: ColorFilter.mode(AppColors.lightgrey, BlendMode.srcIn),), label: 'Orders',
-          activeIcon: SvgPicture.asset('assets/ordericon.svg', 
-          colorFilter: ColorFilter.mode(AppColors.black, BlendMode.srcIn),)),
+          // BottomNavigationBarItem(icon: SvgPicture.asset('assets/ordericon.svg',
+          // colorFilter: ColorFilter.mode(AppColors.lightgrey, BlendMode.srcIn),), label: 'Orders',
+          // activeIcon: SvgPicture.asset('assets/ordericon.svg', 
+          // colorFilter: ColorFilter.mode(AppColors.black, BlendMode.srcIn),)),
 
           BottomNavigationBarItem(icon: SizedBox(
             width: 24,

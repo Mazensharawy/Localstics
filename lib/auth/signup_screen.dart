@@ -399,21 +399,31 @@ class _SignupScreenState extends State<SignupScreen> {
       _signupError = null;
     });
     try {
+      // Check if the email is already in use in Supabase users table
+      final existing = await Supabase.instance.client
+          .from('users')
+          .select('email')
+          .eq('email', _email.text.trim())
+          .maybeSingle();
+      if (existing != null) {
+        setState(() {
+          _signupError = "This email is already used by another account. Please use a different email.";
+        });
+        return;
+      }
       // Check if the email is already in use in Firebase
       final signInMethods = await _auth.fetchSignInMethodsForEmail(_email.text.trim());
       if (signInMethods.isNotEmpty) {
         setState(() {
-          _signupError = "Email address is already Found. Please Logn.";
+          _signupError = "Email address is already found. Please log in.";
         });
         return;
       }
-
       // Create the user in Firebase
       final userCredential = await _auth.createUserWithEmailAndPassword(
         _email.text.trim(),
         _password.text.trim(),
       );
-
       // If Firebase user creation is successful, insert the user into the database
       if (userCredential != null) {
         await Supabase.instance.client
